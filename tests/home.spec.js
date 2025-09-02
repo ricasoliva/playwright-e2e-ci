@@ -7,6 +7,7 @@ test('homepage has correct title and content', async ({ page }) => {
 
   // Check the page title
   await expect(page).toHaveTitle(/Vite \+ React/);
+  await page.waitForTimeout(2000);
 
   // Check if React logo is visible
   const reactLogo = page.getByAltText('React logo');
