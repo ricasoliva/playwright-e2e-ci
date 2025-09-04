@@ -4,6 +4,10 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  USERNAME: ${{ secrets.USERNAME }}
+  PASSWORD: ${{ secrets.PASSWORD }}
+
 jobs:
   test:
     timeout-minutes: 60
@@ -25,7 +29,12 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright tests
-        run: npx playwright test
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+        run: |
+          echo "Running tests with secrets set"
+          npx playwright test
 
       - name: Upload Playwright HTML report
         if: always() # upload even if tests fail

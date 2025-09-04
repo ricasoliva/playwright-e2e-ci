@@ -10,7 +10,7 @@ test('homepage has correct title and content', async ({ page }) => {
   await page.waitForTimeout(2000);
 
   // Check if React logo is visible
-  const reactLogo = page.getByAltText('React logo');
+  const reactLogo = page.getByAltText('React logos');
   await expect(reactLogo).toBeVisible();
 
   // Check if the count button is present
