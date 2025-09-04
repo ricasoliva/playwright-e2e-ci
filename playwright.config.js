@@ -6,7 +6,7 @@ export default defineConfig({
   testMatch: ['**/*.spec.js'],
   reporter: [['html']], 
   use: {
-    headless: false, 
+    headless: true, 
     video: 'on', 
     screenshot: 'on', 
   },
