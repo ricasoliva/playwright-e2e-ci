@@ -1,19 +1,33 @@
 // @ts-check
+import path from 'path';
+import { config } from 'dotenv';
 import { test, expect } from '@playwright/test';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+// Get __dirname in ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
-});
+// Only load dotenv in non-CI environments
+if (!process.env.CI) {
+  config({ path: path.join(__dirname, '..', '.env') });
+}
 
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+// Make sure required env vars exist
+const username = process.env.USERNAME;
+const password = process.env.PASSWORD;
 
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
+if (!username || !password) {
+  throw new Error('Missing USERNAME or PASSWORD environment variables.');
+}
 
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
+test.only('login test', async ({ page }) => {
+  await page.goto('https://www.saucedemo.com/');
+  await page.getByPlaceholder('Username').fill(username);
+  await page.getByPlaceholder('Password').fill(password);
+  await page.getByRole('button', { name: 'Login' }).click();
+
+  // Example assertion
+  await expect(page).toHaveURL(/inventory/);
 });
