@@ -22,7 +22,7 @@ if (!username || !password) {
   throw new Error('Missing USERNAME or PASSWORD environment variables.');
 }
 
-test.only('login test', async ({ page }) => {
+test('login test', async ({ page }) => {
   await page.goto('https://www.saucedemo.com/');
   await page.getByPlaceholder('Username').fill(username);
   await page.getByPlaceholder('Password').fill(password);
