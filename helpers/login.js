@@ -1,31 +1,39 @@
-// helpers/login.js
 import path from 'path';
 import { config } from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
-// Get __dirname in ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Load .env only in local/dev
 if (!process.env.CI) {
   config({ path: path.join(__dirname, '..', '.env') });
 }
 
 /**
+ * Helper function to perform login in tests
  * @param {import('@playwright/test').Page} page
  */
 export async function login(page) {
-  const username = process.env.USERNAME;
-  const password = process.env.PASSWORD;
+  const baseURL = 'https://digitane.jp/online-stg/login/';
+  const email = process.env.LOGIN_EMAIL;
+  const password = process.env.LOGIN_PASSWORD;
 
-  if (!username || !password) {
-    throw new Error('Missing USERNAME or PASSWORD environment variables.');
+  page.on('dialog', async (dialog) => {
+    console.log(`Dialog type: ${dialog.type()}, message: ${dialog.message()}`);
+    await dialog.accept('digitane');
+  });
+
+  if (!email || !password) {
+    console.error('Environment variables:', {
+      email,
+      envKeys: Object.keys(process.env)
+    });
+    throw new Error('Missing DIGITANE_EMAIL or DIGITANE_PASSWORD environment variable.');
   }
 
-  await page.goto('https://www.saucedemo.com/');
-  await page.getByPlaceholder('Username').fill(username);
-  await page.getByPlaceholder('Password').fill(password);
-  await page.getByRole('button', { name: 'Login' }).click();
+  await page.goto(baseURL);
+  await page.getByRole('textbox', { name: 'メールアドレス' }).fill(email);
+  await page.getByRole('textbox', { name: 'パスワード' }).fill(password);
+  await page.getByRole('button', { name: 'ログイン' }).click();
 }
