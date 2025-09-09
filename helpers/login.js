@@ -29,7 +29,7 @@ export async function login(page) {
       email,
       envKeys: Object.keys(process.env)
     });
-    throw new Error('Missing DIGITANE_EMAIL or DIGITANE_PASSWORD environment variable.');
+    throw new Error('Missing LOGIN_EMAIL or LOGIN_PASSWORD environment variable.');
   }
 
   await page.goto(baseURL);
