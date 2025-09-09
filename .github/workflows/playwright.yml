@@ -5,8 +5,8 @@ on:
     branches: [main]
 
 env:
-  EMAIL: ${{ secrets.LOGIN_EMAIL }}
-  PASSWORD: ${{ secrets.LOGIN_PASSWORD }}
+  LOGIN_EMAIL: ${{ secrets.LOGIN_EMAIL }}
+  LOGIN_PASSWORD: ${{ secrets.LOGIN_PASSWORD }}
 
 jobs:
   test:
@@ -30,8 +30,8 @@ jobs:
 
       - name: Run Playwright tests
         env:
-          EMAIL: ${{ secrets.LOGIN_EMAIL }}
-          PASSWORD: ${{ secrets.LOGIN_PASSWORD }}
+          LOGIN_EMAIL: ${{ secrets.LOGIN_EMAIL }}
+          LOGIN_PASSWORD: ${{ secrets.LOGIN_PASSWORD }}
         run: |
           echo "Running tests with secrets set"
           npx playwright test
